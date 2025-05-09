@@ -8,7 +8,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/16022/16022033.png">
+
     <style>
         :root {
             --primary-color: #4361ee;
@@ -24,34 +26,42 @@
             background-color: #f5f7ff;
             color: var(--dark-text);
             line-height: 1.6;
+            transition: background-image 0.5s ease;
         }
         
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
+            position: relative;
+            z-index: 1;
         }
         
         .header {
             text-align: center;
             margin-bottom: 2.5rem;
+            position: relative;
+            z-index: 2;
         }
         
         .header h1 {
             font-weight: 600;
             color: var(--primary-color);
             margin-bottom: 0.5rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
         }
         
         .header p {
             color: var(--light-text);
             font-size: 1.1rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
         }
         
         .search-container {
             max-width: 600px;
             margin: 0 auto 2rem;
             position: relative;
+            z-index: 2;
         }
         
         .search-container i {
@@ -67,6 +77,7 @@
             border: 2px solid #e9ecef;
             height: 48px;
             transition: all 0.3s ease;
+            background-color: rgba(255,255,255,0.9);
         }
         
         #countrySelect:focus {
@@ -81,7 +92,9 @@
             overflow: hidden;
             transition: transform 0.3s ease;
             margin-bottom: 2rem;
-            background: white;
+            background: rgba(255,255,255,0.95);
+            position: relative;
+            z-index: 2;
         }
         
         .card:hover {
@@ -95,6 +108,8 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            position: relative;
+            z-index: 2;
         }
         
         .card-header h4 {
@@ -104,6 +119,8 @@
         
         .card-body {
             padding: 2rem;
+            position: relative;
+            z-index: 2;
         }
         
         .data-item {
@@ -130,6 +147,8 @@
             justify-content: center;
             padding: 3rem;
             text-align: center;
+            position: relative;
+            z-index: 2;
         }
         
         .spinner {
@@ -180,6 +199,21 @@
             border-bottom: 2px solid #f0f0f0;
         }
         
+        /* Flag background styling */
+        .flag-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.15;
+            z-index: 0;
+            transition: opacity 0.5s ease, background-image 0.5s ease;
+        }
+        
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .container {
@@ -223,344 +257,412 @@
     </style>
 </head>
 <body>
+    <!-- Flag background element -->
+    <div class="flag-background" id="flagBackground"></div>
 
-<div class="container">
-    <div class="header">
-        <h1>Country Data Explorer</h1>
-        <p>Discover comprehensive statistics and information about countries worldwide</p>
-        <p>Provide by: Mr. Phekdey PHORN</p>
-    </div>
-
-    <!-- Search Input -->
-    <div class="search-container">
-        <i class="fas fa-search"></i>
-        <select class="form-select form-select-lg" id="countrySelect" onchange="fetchCountryData()">
-            <option value="">Search for a country...</option>
-            <option value="Cambodia">Cambodia</option>
-            <option value="United States">United States</option>
-            <option value="Canada">Canada</option>
-            <option value="India">India</option>
-            <option value="Australia">Australia</option>
-            <option value="Germany">Germany</option>
-            <option value="Brazil">Brazil</option>
-            <option value="United Kingdom">United Kingdom</option>
-            <option value="France">France</option>
-            <option value="Italy">Italy</option>
-            <option value="Japan">Japan</option>
-            <option value="China">China</option>
-            <option value="Mexico">Mexico</option>
-            <option value="Russia">Russia</option>
-            <option value="South Korea">South Korea</option>
-            <option value="Spain">Spain</option>
-            <option value="Argentina">Argentina</option>
-            <option value="South Africa">South Africa</option>
-            <option value="Saudi Arabia">Saudi Arabia</option>
-            <option value="Nigeria">Nigeria</option>
-            <option value="Egypt">Egypt</option>
-            <option value="Turkey">Turkey</option>
-            <option value="Indonesia">Indonesia</option>
-            <option value="Pakistan">Pakistan</option>
-            <option value="Bangladesh">Bangladesh</option>
-            <option value="Vietnam">Vietnam</option>
-            <option value="Thailand">Thailand</option>
-            <option value="Philippines">Philippines</option>
-            <option value="Poland">Poland</option>
-            <option value="Sweden">Sweden</option>
-            <option value="Norway">Norway</option>
-            <option value="Denmark">Denmark</option>
-            <option value="Finland">Finland</option>
-            <option value="Greece">Greece</option>
-            <option value="Netherlands">Netherlands</option>
-            <option value="Belgium">Belgium</option>
-            <option value="Switzerland">Switzerland</option>
-            <option value="Austria">Austria</option>
-            <option value="New Zealand">New Zealand</option>
-            <option value="Portugal">Portugal</option>
-            <option value="Chile">Chile</option>
-            <option value="Colombia">Colombia</option>
-            <option value="Malaysia">Malaysia</option>
-            <option value="Singapore">Singapore</option>
-            <option value="Israel">Israel</option>
-            <option value="United Arab Emirates">United Arab Emirates</option>
-            <option value="Qatar">Qatar</option>
-            <option value="Kuwait">Kuwait</option>
-            <option value="Iraq">Iraq</option>
-            <option value="Lebanon">Lebanon</option>
-            <option value="Jordan">Jordan</option>
-            <option value="Palestine">Palestine</option>
-        </select>        
-    </div>
-
-    <!-- Loading Indicator -->
-    <div id="loadingIndicator" style="display:none;" class="loading-container">
-        <div class="spinner-border spinner" role="status">
-            <span class="visually-hidden">Loading...</span>
+    <div class="container">
+        <div class="header">
+            <h1>Country Data Explorer</h1>
+            <p>Discover comprehensive statistics and information about countries worldwide</p>
+            <p>Provide by: Mr. Phekdey PHORN</p>
         </div>
-        <h5>Loading country data</h5>
-        <p class="text-muted">Please wait while we gather the information...</p>
-    </div>
 
-    <!-- Country Data Display -->
-    <div id="countryData" class="card fade-in" style="display:none;">
-        <div class="card-header">
-            <div class="d-flex align-items-center gap-3">
-                <h4 id="countryName"></h4>
-                <span id="countryRegion" class="badge"></span>
+        <!-- Search Input -->
+        <div class="search-container">
+            <i class="fas fa-search"></i>
+            <select class="form-select form-select-lg" id="countrySelect" onchange="fetchCountryData()">
+                <option value="">Search for a country...</option>
+                <option value="Cambodia">Cambodia</option>
+                <option value="United States">United States</option>
+                <option value="Canada">Canada</option>
+                <option value="India">India</option>
+                <option value="Australia">Australia</option>
+                <option value="Germany">Germany</option>
+                <option value="Brazil">Brazil</option>
+                <option value="United Kingdom">United Kingdom</option>
+                <option value="France">France</option>
+                <option value="Italy">Italy</option>
+                <option value="Japan">Japan</option>
+                <option value="China">China</option>
+                <option value="Mexico">Mexico</option>
+                <option value="Russia">Russia</option>
+                <option value="South Korea">South Korea</option>
+                <option value="Spain">Spain</option>
+                <option value="Argentina">Argentina</option>
+                <option value="South Africa">South Africa</option>
+                <option value="Saudi Arabia">Saudi Arabia</option>
+                <option value="Nigeria">Nigeria</option>
+                <option value="Egypt">Egypt</option>
+                <option value="Turkey">Turkey</option>
+                <option value="Indonesia">Indonesia</option>
+                <option value="Pakistan">Pakistan</option>
+                <option value="Bangladesh">Bangladesh</option>
+                <option value="Vietnam">Vietnam</option>
+                <option value="Thailand">Thailand</option>
+                <option value="Philippines">Philippines</option>
+                <option value="Poland">Poland</option>
+                <option value="Sweden">Sweden</option>
+                <option value="Norway">Norway</option>
+                <option value="Denmark">Denmark</option>
+                <option value="Finland">Finland</option>
+                <option value="Greece">Greece</option>
+                <option value="Netherlands">Netherlands</option>
+                <option value="Belgium">Belgium</option>
+                <option value="Switzerland">Switzerland</option>
+                <option value="Austria">Austria</option>
+                <option value="New Zealand">New Zealand</option>
+                <option value="Portugal">Portugal</option>
+                <option value="Chile">Chile</option>
+                <option value="Colombia">Colombia</option>
+                <option value="Malaysia">Malaysia</option>
+                <option value="Singapore">Singapore</option>
+                <option value="Israel">Israel</option>
+                <option value="United Arab Emirates">United Arab Emirates</option>
+                <option value="Qatar">Qatar</option>
+                <option value="Kuwait">Kuwait</option>
+                <option value="Iraq">Iraq</option>
+                <option value="Lebanon">Lebanon</option>
+                <option value="Jordan">Jordan</option>
+                <option value="Palestine">Palestine</option>
+            </select>        
+        </div>
+
+        <!-- Loading Indicator -->
+        <div id="loadingIndicator" style="display:none;" class="loading-container">
+            <div class="spinner-border spinner" role="status">
+                <span class="visually-hidden">Loading...</span>
             </div>
-            <button id="exportBtn" class="btn btn-primary" style="display:none;" onclick="exportCountryData()">
-                <i class="fas fa-download me-2"></i>Export Data
-            </button>
+            <h5>Loading country data</h5>
+            <p class="text-muted">Please wait while we gather the information...</p>
         </div>
-        <div class="card-body">
-            <div class="data-grid">
-                <!-- Basic Info Section -->
-                <div class="data-section">
-                    <h5><i class="fas fa-info-circle me-2"></i>Basic Information</h5>
-                    <div class="data-item">
-                        <strong>Capital:</strong> <span id="capital"></span>
-                    </div>
-                    <div class="data-item">
-                        <strong>Population:</strong> <span id="population"></span>
-                    </div>
-                    <div class="data-item">
-                        <strong>Surface Area:</strong> <span id="surfaceArea"></span> km²
-                    </div>
-                    <div class="data-item">
-                        <strong>Currency:</strong> <span id="currency"></span>
-                    </div>
-                </div>
 
-                <!-- Economy Section -->
-                <div class="data-section">
-                    <h5><i class="fas fa-chart-line me-2"></i>Economy</h5>
-                    <div class="data-item">
-                        <strong>GDP:</strong> $<span id="gdp"></span>
-                    </div>
-                    <div class="data-item">
-                        <strong>GDP Per Capita:</strong> $<span id="gdpPerCapita"></span>
-                    </div>
-                    <div class="data-item">
-                        <strong>Unemployment Rate:</strong> <span id="unemployment"></span>%
-                    </div>
-                    <div class="data-item">
-                        <strong>Imports:</strong> $<span id="imports"></span>
-                    </div>
-                    <div class="data-item">
-                        <strong>Exports:</strong> $<span id="exports"></span>
-                    </div>
+        <!-- Country Data Display -->
+        <div id="countryData" class="card fade-in" style="display:none;">
+            <div class="card-header">
+                <div class="d-flex align-items-center gap-3">
+                    <h4 id="countryName"></h4>
+                    <span id="countryRegion" class="badge"></span>
                 </div>
+                <button id="exportBtn" class="btn btn-primary" style="display:none;" onclick="exportCountryData()">
+                    <i class="fas fa-download me-2"></i>Export Data
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="data-grid">
+                    <!-- Basic Info Section -->
+                    <div class="data-section">
+                        <h5><i class="fas fa-info-circle me-2"></i>Basic Information</h5>
+                        <div class="data-item">
+                            <strong>Capital:</strong> <span id="capital"></span>
+                        </div>
+                        <div class="data-item">
+                            <strong>Population:</strong> <span id="population"></span>
+                        </div>
+                        <div class="data-item">
+                            <strong>Surface Area:</strong> <span id="surfaceArea"></span> km²
+                        </div>
+                        <div class="data-item">
+                            <strong>Currency:</strong> <span id="currency"></span>
+                        </div>
+                    </div>
 
-                <!-- Demographics Section -->
-                <div class="data-section">
-                    <h5><i class="fas fa-users me-2"></i>Demographics</h5>
-                    <div class="data-item">
-                        <strong>Life Expectancy (Male):</strong> <span id="lifeExpectancyMale"></span>
+                    <!-- Economy Section -->
+                    <div class="data-section">
+                        <h5><i class="fas fa-chart-line me-2"></i>Economy</h5>
+                        <div class="data-item">
+                            <strong>GDP:</strong> $<span id="gdp"></span>
+                        </div>
+                        <div class="data-item">
+                            <strong>GDP Per Capita:</strong> $<span id="gdpPerCapita"></span>
+                        </div>
+                        <div class="data-item">
+                            <strong>Unemployment Rate:</strong> <span id="unemployment"></span>%
+                        </div>
+                        <div class="data-item">
+                            <strong>Imports:</strong> $<span id="imports"></span>
+                        </div>
+                        <div class="data-item">
+                            <strong>Exports:</strong> $<span id="exports"></span>
+                        </div>
                     </div>
-                    <div class="data-item">
-                        <strong>Life Expectancy (Female):</strong> <span id="lifeExpectancyFemale"></span>
-                    </div>
-                    <div class="data-item">
-                        <strong>Sex Ratio:</strong> <span id="sexRatio"></span>
-                    </div>
-                    <div class="data-item">
-                        <strong>Fertility Rate:</strong> <span id="fertility"></span> children per woman
-                    </div>
-                    <div class="data-item">
-                        <strong>Urban Population Growth:</strong> <span id="urbanPopulationGrowth"></span>%
-                    </div>
-                </div>
 
-                <!-- Employment Section -->
-                <div class="data-section">
-                    <h5><i class="fas fa-briefcase me-2"></i>Employment</h5>
-                    <div class="data-item">
-                        <strong>Employment in Services:</strong> <span id="employmentServices"></span>%
+                    <!-- Demographics Section -->
+                    <div class="data-section">
+                        <h5><i class="fas fa-users me-2"></i>Demographics</h5>
+                        <div class="data-item">
+                            <strong>Life Expectancy (Male):</strong> <span id="lifeExpectancyMale"></span>
+                        </div>
+                        <div class="data-item">
+                            <strong>Life Expectancy (Female):</strong> <span id="lifeExpectancyFemale"></span>
+                        </div>
+                        <div class="data-item">
+                            <strong>Sex Ratio:</strong> <span id="sexRatio"></span>
+                        </div>
+                        <div class="data-item">
+                            <strong>Fertility Rate:</strong> <span id="fertility"></span> children per woman
+                        </div>
+                        <div class="data-item">
+                            <strong>Urban Population Growth:</strong> <span id="urbanPopulationGrowth"></span>%
+                        </div>
                     </div>
-                    <div class="data-item">
-                        <strong>Employment in Agriculture:</strong> <span id="employmentAgriculture"></span>%
-                    </div>
-                </div>
 
-                <!-- Society Section -->
-                <div class="data-section">
-                    <h5><i class="fas fa-globe-americas me-2"></i>Society & Environment</h5>
-                    <div class="data-item">
-                        <strong>Homicide Rate:</strong> <span id="homicideRate"></span> per 100,000
+                    <!-- Employment Section -->
+                    <div class="data-section">
+                        <h5><i class="fas fa-briefcase me-2"></i>Employment</h5>
+                        <div class="data-item">
+                            <strong>Employment in Services:</strong> <span id="employmentServices"></span>%
+                        </div>
+                        <div class="data-item">
+                            <strong>Employment in Agriculture:</strong> <span id="employmentAgriculture"></span>%
+                        </div>
                     </div>
-                    <div class="data-item">
-                        <strong>CO2 Emissions:</strong> <span id="co2Emissions"></span> Mt
-                    </div>
-                    <div class="data-item">
-                        <strong>Forested Area:</strong> <span id="forestedArea"></span>%
-                    </div>
-                    <div class="data-item">
-                        <strong>Threatened Species:</strong> <span id="threatenedSpecies"></span>
-                    </div>
-                    <div class="data-item">
-                        <strong>Internet Users:</strong> <span id="internetUsers"></span>%
-                    </div>
-                </div>
 
-                <!-- Tourism Section -->
-                <div class="data-section">
-                    <h5><i class="fas fa-umbrella-beach me-2"></i>Tourism</h5>
-                    <div class="data-item">
-                        <strong>Tourists:</strong> <span id="tourists"></span>
+                    <!-- Society Section -->
+                    <div class="data-section">
+                        <h5><i class="fas fa-globe-americas me-2"></i>Society & Environment</h5>
+                        <div class="data-item">
+                            <strong>Homicide Rate:</strong> <span id="homicideRate"></span> per 100,000
+                        </div>
+                        <div class="data-item">
+                            <strong>CO2 Emissions:</strong> <span id="co2Emissions"></span> Mt
+                        </div>
+                        <div class="data-item">
+                            <strong>Forested Area:</strong> <span id="forestedArea"></span>%
+                        </div>
+                        <div class="data-item">
+                            <strong>Threatened Species:</strong> <span id="threatenedSpecies"></span>
+                        </div>
+                        <div class="data-item">
+                            <strong>Internet Users:</strong> <span id="internetUsers"></span>%
+                        </div>
                     </div>
-                    <div class="data-item">
-                        <strong>Refugees:</strong> <span id="refugees"></span> per 1000
+
+                    <!-- Tourism Section -->
+                    <div class="data-section">
+                        <h5><i class="fas fa-umbrella-beach me-2"></i>Tourism</h5>
+                        <div class="data-item">
+                            <strong>Tourists:</strong> <span id="tourists"></span>
+                        </div>
+                        <div class="data-item">
+                            <strong>Refugees:</strong> <span id="refugees"></span> per 1000
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Modern JavaScript libraries -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <!-- Modern JavaScript libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-<script>
-    const apiKey = "d0jfwH2Y4X/sF+GobCjTFA==JJEXQhY1YVylDkI9";  // Your API Key from API Ninjas
-
-    // Initialize Select2 for better dropdown UX
-    $(document).ready(function() {
-        $('#countrySelect').select2({
-            placeholder: "Search for a country...",
-            allowClear: true,
-            width: '100%'
-        });
-    });
-
-    // Function to fetch country data from API
-    function fetchCountryData() {
-        const countryName = document.getElementById("countrySelect").value;
-
-        if (!countryName) {
-            document.getElementById("countryData").style.display = "none";
-            return;
-        }
-
-        // Show loading indicator
-        document.getElementById("loadingIndicator").style.display = "flex";
-        document.getElementById("countryData").style.display = "none";
-
-        // Make API request to fetch country data
-        fetch(`https://api.api-ninjas.com/v1/country?name=${countryName}`, {
-            headers: { 'X-Api-Key': apiKey }
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            // Hide loading indicator
-            document.getElementById("loadingIndicator").style.display = "none";
-            
-            // Display country data
-            if (data && data.length > 0) {
-                const country = data[0];
-                document.getElementById("countryName").textContent = country.name;
-                document.getElementById("countryRegion").textContent = country.region;
-                document.getElementById("capital").textContent = country.capital || "N/A";
-                document.getElementById("gdp").textContent = formatNumber(country.gdp);
-                document.getElementById("population").textContent = formatNumber(country.population);
-                document.getElementById("currency").textContent = country.currency?.name || "N/A";
-                document.getElementById("lifeExpectancyMale").textContent = country.life_expectancy_male || "N/A";
-                document.getElementById("lifeExpectancyFemale").textContent = country.life_expectancy_female || "N/A";
-                document.getElementById("sexRatio").textContent = country.sex_ratio || "N/A";
-                document.getElementById("surfaceArea").textContent = formatNumber(country.surface_area);
-                document.getElementById("unemployment").textContent = country.unemployment || "N/A";
-                document.getElementById("imports").textContent = formatNumber(country.imports);
-                document.getElementById("exports").textContent = formatNumber(country.exports);
-                document.getElementById("homicideRate").textContent = country.homicide_rate || "N/A";
-                document.getElementById("employmentServices").textContent = country.employment_services || "N/A";
-                document.getElementById("employmentAgriculture").textContent = country.employment_agriculture || "N/A";
-                document.getElementById("urbanPopulationGrowth").textContent = country.urban_population_growth || "N/A";
-                document.getElementById("co2Emissions").textContent = formatNumber(country.co2_emissions);
-                document.getElementById("forestedArea").textContent = country.forested_area || "N/A";
-                document.getElementById("tourists").textContent = formatNumber(country.tourists);
-                document.getElementById("threatenedSpecies").textContent = formatNumber(country.threatened_species);
-                document.getElementById("internetUsers").textContent = country.internet_users || "N/A";
-                document.getElementById("gdpPerCapita").textContent = formatNumber(country.gdp_per_capita);
-                document.getElementById("fertility").textContent = country.fertility_rate || "N/A";
-                document.getElementById("refugees").textContent = country.refugees || "N/A";
-
-                // Show country data with animation
-                const countryDataElement = document.getElementById("countryData");
-                countryDataElement.style.display = "block";
-                countryDataElement.classList.add("fade-in");
-                document.getElementById("exportBtn").style.display = "inline-block";
-                
-                // Remove animation class after it completes to allow re-animation
-                setTimeout(() => {
-                    countryDataElement.classList.remove("fade-in");
-                }, 500);
-            } else {
-                showError("No data found for this country.");
-            }
-        })
-        .catch(error => {
-            // Hide loading indicator
-            document.getElementById("loadingIndicator").style.display = "none";
-            showError("Error fetching country data. Please try again later.");
-            console.error("Error:", error);
-        });
-    }
-
-    // Helper function to format large numbers
-    function formatNumber(num) {
-        if (!num) return "N/A";
-        return new Intl.NumberFormat().format(num);
-    }
-
-    // Function to show error messages
-    function showError(message) {
-        // In a production app, you might use a toast or modal for better UX
-        alert(message);
-    }
-
-    // Function to export country data as JSON
-    function exportCountryData() {
-        const countryName = document.getElementById("countryName").textContent;
-        const countryData = {
-            name: countryName,
-            region: document.getElementById("countryRegion").textContent,
-            capital: document.getElementById("capital").textContent,
-            gdp: document.getElementById("gdp").textContent,
-            population: document.getElementById("population").textContent,
-            currency: document.getElementById("currency").textContent,
-            lifeExpectancyMale: document.getElementById("lifeExpectancyMale").textContent,
-            lifeExpectancyFemale: document.getElementById("lifeExpectancyFemale").textContent,
-            sexRatio: document.getElementById("sexRatio").textContent,
-            surfaceArea: document.getElementById("surfaceArea").textContent,
-            unemployment: document.getElementById("unemployment").textContent,
-            imports: document.getElementById("imports").textContent,
-            exports: document.getElementById("exports").textContent,
-            homicideRate: document.getElementById("homicideRate").textContent,
-            employmentServices: document.getElementById("employmentServices").textContent,
-            employmentAgriculture: document.getElementById("employmentAgriculture").textContent,
-            urbanPopulationGrowth: document.getElementById("urbanPopulationGrowth").textContent,
-            co2Emissions: document.getElementById("co2Emissions").textContent,
-            forestedArea: document.getElementById("forestedArea").textContent,
-            tourists: document.getElementById("tourists").textContent,
-            threatenedSpecies: document.getElementById("threatenedSpecies").textContent,
-            internetUsers: document.getElementById("internetUsers").textContent,
-            gdpPerCapita: document.getElementById("gdpPerCapita").textContent,
-            fertility: document.getElementById("fertility").textContent,
-            refugees: document.getElementById("refugees").textContent
+    <script>
+        const apiKey = "d0jfwH2Y4X/sF+GobCjTFA==JJEXQhY1YVylDkI9";  // Your API Key from API Ninjas
+        
+        // Country to country code mapping
+        const countryCodes = {
+            "Cambodia": "kh",
+            "United States": "us",
+            "Canada": "ca",
+            "India": "in",
+            "Australia": "au",
+            "Germany": "de",
+            "Brazil": "br",
+            "United Kingdom": "gb",
+            "France": "fr",
+            "Italy": "it",
+            "Japan": "jp",
+            "China": "cn",
+            "Mexico": "mx",
+            "Russia": "ru",
+            "South Korea": "kr",
+            "Spain": "es",
+            "Argentina": "ar",
+            "South Africa": "za",
+            "Saudi Arabia": "sa",
+            "Nigeria": "ng",
+            "Egypt": "eg",
+            "Turkey": "tr",
+            "Indonesia": "id",
+            "Pakistan": "pk",
+            "Bangladesh": "bd",
+            "Vietnam": "vn",
+            "Thailand": "th",
+            "Philippines": "ph",
+            "Poland": "pl",
+            "Sweden": "se",
+            "Norway": "no",
+            "Denmark": "dk",
+            "Finland": "fi",
+            "Greece": "gr",
+            "Netherlands": "nl",
+            "Belgium": "be",
+            "Switzerland": "ch",
+            "Austria": "at",
+            "New Zealand": "nz",
+            "Portugal": "pt",
+            "Chile": "cl",
+            "Colombia": "co",
+            "Malaysia": "my",
+            "Singapore": "sg",
+            "Israel": "il",
+            "United Arab Emirates": "ae",
+            "Qatar": "qa",
+            "Kuwait": "kw",
+            "Iraq": "iq",
+            "Lebanon": "lb",
+            "Jordan": "jo",
+            "Palestine": "ps"
         };
 
-        const jsonBlob = new Blob([JSON.stringify(countryData, null, 2)], { type: "application/json" });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(jsonBlob);
-        link.download = `${countryName.replace(/\s+/g, '_')}_data.json`;
-        link.click();
-    }
-</script>
+        // Initialize Select2 for better dropdown UX
+        $(document).ready(function() {
+            $('#countrySelect').select2({
+                placeholder: "Search for a country...",
+                allowClear: true,
+                width: '100%'
+            });
+        });
 
+        // Function to fetch country data from API
+        function fetchCountryData() {
+            const countryName = document.getElementById("countrySelect").value;
+            const flagBackground = document.getElementById("flagBackground");
+
+            if (!countryName) {
+                document.getElementById("countryData").style.display = "none";
+                flagBackground.style.opacity = "0";
+                return;
+            }
+
+            // Show loading indicator
+            document.getElementById("loadingIndicator").style.display = "flex";
+            document.getElementById("countryData").style.display = "none";
+
+            // Set flag background (if we have a code for this country)
+            const countryCode = countryCodes[countryName];
+            if (countryCode) {
+                flagBackground.style.backgroundImage = `url(https://flagcdn.com/w1280/${countryCode}.jpg)`;
+                flagBackground.style.opacity = "0.15";
+            } else {
+                flagBackground.style.opacity = "0";
+            }
+
+            // Make API request to fetch country data
+            fetch(`https://api.api-ninjas.com/v1/country?name=${countryName}`, {
+                headers: { 'X-Api-Key': apiKey }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Hide loading indicator
+                document.getElementById("loadingIndicator").style.display = "none";
+                
+                // Display country data
+                if (data && data.length > 0) {
+                    const country = data[0];
+                    document.getElementById("countryName").textContent = country.name;
+                    document.getElementById("countryRegion").textContent = country.region;
+                    document.getElementById("capital").textContent = country.capital || "N/A";
+                    document.getElementById("gdp").textContent = formatNumber(country.gdp);
+                    document.getElementById("population").textContent = formatNumber(country.population);
+                    document.getElementById("currency").textContent = country.currency?.name || "N/A";
+                    document.getElementById("lifeExpectancyMale").textContent = country.life_expectancy_male || "N/A";
+                    document.getElementById("lifeExpectancyFemale").textContent = country.life_expectancy_female || "N/A";
+                    document.getElementById("sexRatio").textContent = country.sex_ratio || "N/A";
+                    document.getElementById("surfaceArea").textContent = formatNumber(country.surface_area);
+                    document.getElementById("unemployment").textContent = country.unemployment || "N/A";
+                    document.getElementById("imports").textContent = formatNumber(country.imports);
+                    document.getElementById("exports").textContent = formatNumber(country.exports);
+                    document.getElementById("homicideRate").textContent = country.homicide_rate || "N/A";
+                    document.getElementById("employmentServices").textContent = country.employment_services || "N/A";
+                    document.getElementById("employmentAgriculture").textContent = country.employment_agriculture || "N/A";
+                    document.getElementById("urbanPopulationGrowth").textContent = country.urban_population_growth || "N/A";
+                    document.getElementById("co2Emissions").textContent = formatNumber(country.co2_emissions);
+                    document.getElementById("forestedArea").textContent = country.forested_area || "N/A";
+                    document.getElementById("tourists").textContent = formatNumber(country.tourists);
+                    document.getElementById("threatenedSpecies").textContent = formatNumber(country.threatened_species);
+                    document.getElementById("internetUsers").textContent = country.internet_users || "N/A";
+                    document.getElementById("gdpPerCapita").textContent = formatNumber(country.gdp_per_capita);
+                    document.getElementById("fertility").textContent = country.fertility_rate || "N/A";
+                    document.getElementById("refugees").textContent = country.refugees || "N/A";
+
+                    // Show country data with animation
+                    const countryDataElement = document.getElementById("countryData");
+                    countryDataElement.style.display = "block";
+                    countryDataElement.classList.add("fade-in");
+                    document.getElementById("exportBtn").style.display = "inline-block";
+                    
+                    // Remove animation class after it completes to allow re-animation
+                    setTimeout(() => {
+                        countryDataElement.classList.remove("fade-in");
+                    }, 500);
+                } else {
+                    showError("No data found for this country.");
+                }
+            })
+            .catch(error => {
+                // Hide loading indicator
+                document.getElementById("loadingIndicator").style.display = "none";
+                showError("Error fetching country data. Please try again later.");
+                console.error("Error:", error);
+            });
+        }
+
+        // Helper function to format large numbers
+        function formatNumber(num) {
+            if (!num) return "N/A";
+            return new Intl.NumberFormat().format(num);
+        }
+
+        // Function to show error messages
+        function showError(message) {
+            // In a production app, you might use a toast or modal for better UX
+            alert(message);
+        }
+
+        // Function to export country data as JSON
+        function exportCountryData() {
+            const countryName = document.getElementById("countryName").textContent;
+            const countryData = {
+                name: countryName,
+                region: document.getElementById("countryRegion").textContent,
+                capital: document.getElementById("capital").textContent,
+                gdp: document.getElementById("gdp").textContent,
+                population: document.getElementById("population").textContent,
+                currency: document.getElementById("currency").textContent,
+                lifeExpectancyMale: document.getElementById("lifeExpectancyMale").textContent,
+                lifeExpectancyFemale: document.getElementById("lifeExpectancyFemale").textContent,
+                sexRatio: document.getElementById("sexRatio").textContent,
+                surfaceArea: document.getElementById("surfaceArea").textContent,
+                unemployment: document.getElementById("unemployment").textContent,
+                imports: document.getElementById("imports").textContent,
+                exports: document.getElementById("exports").textContent,
+                homicideRate: document.getElementById("homicideRate").textContent,
+                employmentServices: document.getElementById("employmentServices").textContent,
+                employmentAgriculture: document.getElementById("employmentAgriculture").textContent,
+                urbanPopulationGrowth: document.getElementById("urbanPopulationGrowth").textContent,
+                co2Emissions: document.getElementById("co2Emissions").textContent,
+                forestedArea: document.getElementById("forestedArea").textContent,
+                tourists: document.getElementById("tourists").textContent,
+                threatenedSpecies: document.getElementById("threatenedSpecies").textContent,
+                internetUsers: document.getElementById("internetUsers").textContent,
+                gdpPerCapita: document.getElementById("gdpPerCapita").textContent,
+                fertility: document.getElementById("fertility").textContent,
+                refugees: document.getElementById("refugees").textContent
+            };
+
+            const jsonBlob = new Blob([JSON.stringify(countryData, null, 2)], { type: "application/json" });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(jsonBlob);
+            link.download = `${countryName.replace(/\s+/g, '_')}_data.json`;
+            link.click();
+        }
+    </script>
 </body>
 </html>
